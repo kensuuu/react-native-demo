@@ -1,8 +1,8 @@
-export type Memo = {
+export interface Memo {
   id: string;
   title: string;
   content: string;
+  createdAt: string;
+  updatedAt: string;
   imageUri?: string;
-  createdAt: Date;
-  updatedAt: Date;
-}; 
+} 
