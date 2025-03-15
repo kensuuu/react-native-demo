@@ -1,21 +1,19 @@
-import React, { useCallback, useMemo } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, Animated, Pressable } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { StyleSheet, TextInput, KeyboardAvoidingView, Platform, Animated, Pressable } from 'react-native';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { useMemoStore } from '@/stores/memoStore';
 import { Memo } from '@/types/memo';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function MemoEditScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { memos, updateMemo, addMemo } = useMemoStore();
   const memo = useMemo(() => memos.find((m: Memo) => m.id === id), [memos, id]);
-  const [title, setTitle] = React.useState(memo?.title ?? '');
-  const [content, setContent] = React.useState(memo?.content ?? '');
-  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+  const [title, setTitle] = useState(memo?.title ?? '');
+  const [content, setContent] = useState(memo?.content ?? '');
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const backgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
@@ -23,7 +21,7 @@ export default function MemoEditScreen() {
   const placeholderColor = useThemeColor({}, 'placeholder');
   const primaryColor = useThemeColor({}, 'primary');
 
-  React.useEffect(() => {
+  useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 300,

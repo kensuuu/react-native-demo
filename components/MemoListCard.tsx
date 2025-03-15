@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { memo, useCallback, useEffect, useRef } from 'react';
 import { StyleSheet, FlatList, TouchableOpacity, View, Image, useColorScheme, Animated } from 'react-native';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
@@ -13,7 +13,7 @@ type MemoListProps = {
   onMemoPress: (memo: Memo) => void;
 };
 
-const MemoItem = React.memo(({ item, onPress, isDark }: { 
+const MemoItem = memo(({ item, onPress, isDark }: { 
   item: Memo; 
   onPress: (memo: Memo) => void;
   isDark: boolean;
@@ -22,9 +22,9 @@ const MemoItem = React.memo(({ item, onPress, isDark }: {
   const borderColor = useThemeColor({}, 'cardBorder');
   const textColor = useThemeColor({}, 'text');
   const secondaryColor = useThemeColor({}, 'secondary');
-  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  React.useEffect(() => {
+  useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 300,

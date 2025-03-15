@@ -12,6 +12,7 @@ export default function RootLayout() {
           backgroundColor,
         },
         headerTintColor: tintColor,
+        headerShown: false,
         headerShadowVisible: false,
       }}
     />
