@@ -5,6 +5,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { useMemoStore } from '@/stores/memoStore';
 import { Memo } from '@/types/memo';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function MemoEditScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -33,7 +34,7 @@ export default function MemoEditScreen() {
     if (!title.trim()) return;
 
     const newMemo: Memo = {
-      id: memo?.id ?? Date.now().toString(),
+      id: memo?.id ?? uuidv4(),
       title: title.trim(),
       content: content.trim(),
       createdAt: memo?.createdAt ?? new Date().toISOString(),
