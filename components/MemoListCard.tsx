@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { Ionicons } from '@expo/vector-icons';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { ja } from 'date-fns/locale';
+import { useMemoStore } from '@/stores/memoStore';
 
 type MemoListProps = {
   memos: Memo[];
@@ -22,7 +23,9 @@ const MemoItem = memo(({ item, onPress, isDark }: {
   const borderColor = useThemeColor({}, 'cardBorder');
   const textColor = useThemeColor({}, 'text');
   const secondaryColor = useThemeColor({}, 'secondary');
+  const errorColor = useThemeColor({}, 'error');
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const { deleteMemo } = useMemoStore();
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -44,9 +47,17 @@ const MemoItem = memo(({ item, onPress, isDark }: {
             <ThemedText type="subtitle" numberOfLines={1} style={[styles.memoTitle, { color: textColor }]}>
               {item.title}
             </ThemedText>
-            <ThemedText type="default" style={[styles.memoDate, { color: secondaryColor }]}>
-              {format(new Date(item.updatedAt), 'yyyy/MM/dd HH:mm', { locale: ja })}
-            </ThemedText>
+            <View style={styles.memoHeaderRight}>
+              <ThemedText type="default" style={[styles.memoDate, { color: secondaryColor }]}>
+                {format(new Date(item.updatedAt), 'yyyy/MM/dd HH:mm', { locale: ja })}
+              </ThemedText>
+              <TouchableOpacity
+                onPress={() => deleteMemo(item.id)}
+                style={styles.deleteButton}
+              >
+                <Ionicons name="trash-outline" size={20} color={errorColor} />
+              </TouchableOpacity>
+            </View>
           </View>
           <View style={styles.memoBody}>
             <View style={styles.memoTextContainer}>
@@ -86,7 +97,7 @@ export const MemoList: React.FC<MemoListProps> = ({ memos, onMemoPress }) => {
   const keyExtractor = useCallback((item: Memo) => item.id, []);
 
   const getItemLayout = useCallback((data: any, index: number) => ({
-    length: 140, // メモアイテムの高さ
+    length: 140,
     offset: 140 * index,
     index,
   }), []);
@@ -129,12 +140,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 8,
   },
+  memoHeaderRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   memoTitle: {
     flex: 1,
     marginRight: 8,
   },
   memoDate: {
     fontSize: 14,
+    marginRight: 8,
+  },
+  deleteButton: {
+    padding: 4,
   },
   memoBody: {
     flexDirection: 'row',

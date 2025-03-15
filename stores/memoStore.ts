@@ -8,6 +8,7 @@ interface MemoStore {
   addMemo: (memo: Memo) => void;
   updateMemo: (memo: Memo) => void;
   deleteMemo: (id: string) => void;
+  clearMemos: () => void;
 }
 
 export const useMemoStore = create<MemoStore>()(
@@ -26,6 +27,7 @@ export const useMemoStore = create<MemoStore>()(
         set((state: MemoStore) => ({
           memos: state.memos.filter((m: Memo) => m.id !== id),
         })),
+      clearMemos: () => set({ memos: [] }),
     }),
     {
       name: 'memo-storage',

@@ -13,7 +13,6 @@ export default function RootLayout() {
         },
         headerTintColor: tintColor,
         headerShadowVisible: false,
-        title: 'Memo App',
       }}
     />
   );
